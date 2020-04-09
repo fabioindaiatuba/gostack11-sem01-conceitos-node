@@ -10,14 +10,14 @@ app.use(cors());
 
 const repositories = [];
 
-function validateProjectId(request, response, next) {
+function validateRepositoryId(request, response, next) {
   const { id } = request.params;
   if(!isUuid(id)) {
     return response.status(400).json({ error: 'Invalid repository ID.'});
   }
   return next();
 }
-app.use('/repositories/:id', validateProjectId);
+app.use('/repositories/:id', validateRepositoryId);
 
 app.get("/repositories", (request, response) => {
   return response.json(repositories);
@@ -38,7 +38,14 @@ app.put("/repositories/:id", (request, response) => {
   if(repositoryIndex < 0){
     return response.status(400).json({error: 'Repository not found.'});
   }
-  const repository = { id, title, url, techs, likes: repositories[repositoryIndex].likes};
+  const repository = { 
+    id, 
+    title, 
+    url, 
+    techs, 
+    likes: repositories[repositoryIndex].likes
+  };
+  
   repositories[repositoryIndex] = repository;
   return response.json(repository);
 });
